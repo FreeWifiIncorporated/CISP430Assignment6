@@ -31,7 +31,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CISP430A6.cpp">
+    <ClCompile Include="CISP430V4A6.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

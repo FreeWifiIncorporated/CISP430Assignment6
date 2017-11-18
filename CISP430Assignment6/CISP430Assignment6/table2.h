@@ -86,7 +86,7 @@
 
 using namespace std;
 
-namespace CISP430_A6
+namespace CISP430V4A6
 {
 	template <class RecordType>
 	class Table
