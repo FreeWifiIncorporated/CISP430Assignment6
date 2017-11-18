@@ -1,0 +1,33 @@
+﻿  CISP430A6.cpp
+c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\table2.template(78): error C2672: 'list_head_insert': no matching overloaded function found
+  c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\table2.template(59): note: while compiling class template member function 'void CISP430_A6::Table<CISP430_A6::RecordType>::insert(const RecordType &)'
+          with
+          [
+              RecordType=CISP430_A6::RecordType
+          ]
+  c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\cisp430a6.cpp(46): note: see reference to function template instantiation 'void CISP430_A6::Table<CISP430_A6::RecordType>::insert(const RecordType &)' being compiled
+          with
+          [
+              RecordType=CISP430_A6::RecordType
+          ]
+  c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\cisp430a6.cpp(22): note: see reference to class template instantiation 'CISP430_A6::Table<CISP430_A6::RecordType>' being compiled
+c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\table2.template(78): error C2782: 'void list_head_insert(Node<Item> *&,const Item &)': template parameter 'Item' is ambiguous
+  c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\link2.h(101): note: see declaration of 'list_head_insert'
+  c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\table2.template(78): note: could be 'CISP430_A6::ItemType'
+  c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\table2.template(78): note: or       'CISP430_A6::RecordType'
+c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\table2.template(78): error C2784: 'void list_head_insert(Node<Item> *&,const Item &)': could not deduce template argument for 'const Item &' from 'const CISP430_A6::ItemType'
+  c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\link2.h(101): note: see declaration of 'list_head_insert'
+c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\table2.template(83): error C2672: 'list_insert': no matching overloaded function found
+c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\table2.template(83): error C2782: 'void list_insert(Node<Item> *&,const Item &)': template parameter 'Item' is ambiguous
+  c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\link2.h(104): note: see declaration of 'list_insert'
+  c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\table2.template(83): note: could be 'CISP430_A6::ItemType'
+  c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\table2.template(83): note: or       'CISP430_A6::RecordType'
+c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\table2.template(83): error C2784: 'void list_insert(Node<Item> *&,const Item &)': could not deduce template argument for 'const Item &' from 'const CISP430_A6::ItemType'
+  c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\link2.h(104): note: see declaration of 'list_insert'
+c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\table2.template(92): error C2672: 'list_insert': no matching overloaded function found
+c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\table2.template(92): error C2782: 'void list_insert(Node<Item> *&,const Item &)': template parameter 'Item' is ambiguous
+  c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\link2.h(104): note: see declaration of 'list_insert'
+  c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\table2.template(92): note: could be 'CISP430_A6::ItemType'
+  c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\table2.template(92): note: or       'CISP430_A6::RecordType'
+c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\table2.template(92): error C2784: 'void list_insert(Node<Item> *&,const Item &)': could not deduce template argument for 'const Item &' from 'const CISP430_A6::ItemType'
+  c:\users\n_yar_000\desktop\cisp430assignment6\cisp430assignment6\link2.h(104): note: see declaration of 'list_insert'
