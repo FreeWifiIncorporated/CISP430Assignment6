@@ -1,9 +1,6 @@
-/*
-	Nathan Yarrison
-	CISP 430
-	Assignment 6
-	11/16/2017
-*/
+// Christos Papadopoulos
+// table2.h
+
 // Header file for Table class. Template Class.
 // This class is a container table class for a Table of records.
 // The table parameter, RecordType, is the data type of the records in Table.

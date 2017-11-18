@@ -1,9 +1,6 @@
-/*
-Nathan Yarrison
-CISP 430
-Assignment 6
-11/16/2017
-*/
+// Christos Papadopoulos
+// CISP430A6.cpp
+
 // Driver file for the assignment 6 program.
 
 #include <stdlib.h>

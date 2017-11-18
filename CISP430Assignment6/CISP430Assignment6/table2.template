@@ -1,9 +1,6 @@
-/*
-	Nathan Yarrison
-	CISP 430
-	Assignment 6
-	11/16/2017
-*/
+// Christos Papadopoulos
+// table2.template
+
 // Implementation file for the Table class in table2 header file.
 
 #include <cassert> // Provides ability to assert condtions.
