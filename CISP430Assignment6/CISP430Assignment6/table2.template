@@ -8,6 +8,7 @@
 
 #include <cassert> // Provides ability to assert condtions.
 #include "link2.h"
+#include "table2.h"
 
 using namespace std;
 
@@ -45,10 +46,7 @@ namespace CISP430_A6
 		// Table destructor.
 		for (int i = 0; i < TABLE_SIZE; ++i)
 		{
-			if (data[i] != NULL)
-			{
-				list_clear(data[i]);
-			}
+			list_clear(data[i]);
 		}
 
 		total_records = 0;
@@ -57,39 +55,35 @@ namespace CISP430_A6
 	template<class RecordType>
 	void Table<RecordType>::insert(const RecordType& entry)
 	{
-		bool alreadyThere = false;
-		//Node<RecordType>* nodePtr;
-		size_t index;
-		assert(entry.key >= 0);
-
-		// Call isPresent() to check if there is already a record with the given key in the table.
-		alreadyThere = isPresent(entry);
-
-		if (!alreadyThere)
+		// Function to insert new copy of entry into the table.
+		if (is_present(entry.key) == false) // Check if the there is already an record in the table with the given key.
 		{
-			// If there isn't a record with the given key, then just add the entry into the table.
-			assert(size() < TABLE_SIZE); // If the total number of records exceeds the table size, end program.
-			index = hash(entry.key); // Find postion to insert item at.
+			Node<RecordType> *cursor = data[hash(entry.key)]; //set cursor to head chain node
 
-			// Check if the entry would be inserted at the head of list.
-			if (index == 0)
+			if (cursor == NULL)
 			{
-				// If the obtained index from has is 0, then insert entry at head.
-				list_head_insert(data[index], entry.record);
+				//create new head pointer (and set cursor to it)
+				cursor = data[hash(entry.key)] = new Node<RecordType>;
+				cursor->data = entry;
+				cursor->link = NULL;
 			}
 			else
 			{
-				// Else, the record needs to be inserted into the list at the appropriate key location.
-				list_insert(data[index - 1], entry.record); // Takes index - 1 because the functions list_insert() takes the address of the record before the current spot as a parameter.
-			}
-		}
-		else
-		{
-			// Else, the previous record at the given key must be over written with the new entry.
-			assert(size() < TABLE_SIZE);
-			index = hash(entry.key);
+				//first, find insert point
+				while (cursor->link != NULL && cursor->data.key != entry.key)
+				{
+					cursor = cursor->link;
+				} //cursor now contains last node in list
 
-			list_insert(data[index - 1], entry.record);
+				cursor->link = new Node<RecordType>;
+				//create new ptr, set values for new entry
+				cursor = cursor->link;
+				cursor->link = NULL;
+				cursor->data = entry;
+				//else - duplicate key - do not insert
+			}
+
+			total_records++; //new entry added -- increment count
 		}
 	}
 
@@ -97,97 +91,118 @@ namespace CISP430_A6
 	void Table<RecordType>::remove(int key)
 	{
 		// Function to remove the item at the given key.
-		size_t index = hash(key); // Find location of record to be removed.
+		Node<RecordType> *cursor = data[hash(key)],
+			*precursor = NULL;
 
-		Node<RecordType>* previous = NULL; // Create a pointer to the location before the record to be removed.
-		Node<RecordType>* current = data[index]; // Create a pointer to the record to be removed.
-
-		previous = data[index - 1]; // Point previous at the location of the record before the current record.
-
-		if (data[index] == data[0])
-		{
-			list_head_remove(current);
+		/* find node for deletion
+		(cant use is_present since we need the node address) */
+		bool found = false;
+		while (cursor != NULL)
+		{ //search for node containing key
+			if (cursor->data.key == key)
+			{ //node found -- time to delete
+				found = true;
+				break;
+			}
+			precursor = cursor;
+			cursor = cursor->link;
 		}
-		else
+		if (found == true)
 		{
-			list_remove(previous);
+			//unwanted node found -- time to delete
+			//cursor contains node to be deleted
+			list_remove(precursor);
+			total_records--;
 		}
-
-		delete previous;
-		delete current;
+		//else - no node to delete - do nothing
 	}
 
 	template<class RecordType>
 	void Table<RecordType>::operator=(const Table & source)
 	{
-		if (this != &source) 
-		{
-			for (int i = 0; i < TABLE_SIZE; ++i) 
-			{
-				Node<RecordType> *tail_ptr;
-				list_copy(source.data[i], data[i], tail_ptr);
-			}
-			total_records = source.total_records;
+		if (this == &source) //handle self-assignment case
+			return;
+
+		clear(); //reset object -- prevent leaks
+		Node<RecordType> *tempTail;
+
+		//initialize and copy values
+		for (int i = 0; i < TABLE_SIZE; i++)
+		{ //list_copy(source, head, tail)
+			list_copy(source.data[i], data[i], tempTail);
+			//this->data[i] = tempHead; //set head for data set
 		}
+		this->total_records = source.total_records;
 	}
 
 	template<class RecordType>
 	void Table<RecordType>::print(int index)
 	{
-		Node<RecordType> *curNode = data[index];
+		// Function to print out the records in the table.
+		Node<RecordType> *cursor = data[index];
+		//print header
 		cout << "[( " << index << " )]----> ";
-		if (data[index] != NULL)
-		{
-			while (curNode != NULL)
-			{
-				cout << "[" << data[index] << "]-->";
-			}
+		while (cursor != NULL)
+		{ //traverse nodes, printing each data key
+			cout << "[" << cursor->data.key << "]-->";
+			cursor = cursor->link;
 		}
-		else if ((data[index] == NULL) || (curNode == NULL))
-		{
-			cout << " NULL ";
-		}
-		cout << endl;
+		cout << " NULL" << endl; //end node
 	}
 
 	template<class RecordType>
-	bool Table<RecordType>::isPresent(const RecordType & target) const
+	void Table<RecordType>::clear()
+	{
+		// Function to clear the table.
+		for (int i = 0; i < TABLE_SIZE; i++)
+		{ //use toolkit clear on all indexes
+			list_clear(data[i]);
+		}
+	}
+
+	template<class RecordType>
+	bool Table<RecordType>::is_present(int key) const
 	{
 		// Function to determine whether the target is in the table.
+		Node<RecordType> *cursor = data[hash(key)];
+
 		bool found = false;
-		RecordType result;
-		find(target.key, found, result);
+		while (cursor != NULL)
+		{
+			if (cursor->data.key == key)
+			{ //we have found our match
+				found = true;
+				break; //escape while loop
+			}
+			cursor = cursor->link; //advance list
+		}
 		return found;
 	}
 
 	template<class RecordType>
 	void Table<RecordType>::find(int key, bool & found, RecordType & result) const
 	{
-		Node<RecordType>* current = NULL;
-		Node<RecordType>* previous = NULL;
-		assert(key >= 0);
+		/*Postcondition: If a record is in the Table with the specified key, then found is true and result is set to a copy of the record with that key.  Otherwise found is false and the result contains garbage. */
+		Node<RecordType> *cursor = data[hash(key)];
 
-		find_node(current, previous, key);
-		if (found)
+		found = false;
+		while (cursor != NULL && cursor->data.key != key)
 		{
-			result = current->data;
+			if (cursor->data.key == key)
+			{ //we have found our match
+				found = true;
+				result = cursor->data;
+				break;
+			}
+			//advance through list
+			cursor = cursor->link;
 		}
 	}
 
 	template<class RecordType>
 	size_t Table<RecordType>::hash(int key) const
 	{
+		// Function to find the hash location of the given key.
 		return key % TABLE_SIZE;
-	}
-
-	template<class RecordType>
-	Node<RecordType>* Table<RecordType>::find_node(Node<RecordType>*& cursor, Node<RecordType>*& precursor, int key) const
-	{
-		// Function to find the node of a specific key in the table.
-		size_t index = hash(key);
-		cursor = data[index];
-		precursor = data[index - 1];
-		
-		cursor = list_locate(cursor, key);
 	}
 }

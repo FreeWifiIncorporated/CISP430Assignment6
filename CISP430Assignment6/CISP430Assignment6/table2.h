@@ -55,6 +55,12 @@
 	Postcondition: If the Table with the index has data, then print the index and data in a chaining format.
 */
 
+/*
+	template <class RecordType>
+	void clear();
+	Postcondtition: The table has been cleared of all values.
+*/
+
 // CONSTANT MEMBER FUNCTIONS:
 /*
 	template <class RecordType>
@@ -85,14 +91,12 @@ using namespace std;
 
 namespace CISP430_A6
 {
-	typedef int ItemType;
-
 	template <class RecordType>
 	class Table
 	{
 	public:
 		// MEMBER CONSTANT
-		static const size_t TABLE_SIZE = 811;
+		static const size_t TABLE_SIZE = 10;
 
 		// Constructors and destructor.
 		Table();
@@ -104,9 +108,10 @@ namespace CISP430_A6
 		void remove(int key);
 		void operator=(const Table& source);
 		void print(int index);
+		void clear();
 
 		// Constant member functions.
-		bool isPresent(const RecordType& target) const;
+		bool is_present(int key) const;
 		void find(int key, bool& found, RecordType& result) const;
 		size_t size() const { return total_records; };
 
@@ -116,13 +121,6 @@ namespace CISP430_A6
 
 		// Helper functions:
 		size_t hash(int key) const;
-		Node<RecordType>* find_node(Node<RecordType> *&cursor, Node<RecordType> *&precursor, int key) const;
-	};
-
-	struct RecordType
-	{
-		int key;
-		ItemType record;
 	};
 }
 #include "table2.template" // Include implementation.
