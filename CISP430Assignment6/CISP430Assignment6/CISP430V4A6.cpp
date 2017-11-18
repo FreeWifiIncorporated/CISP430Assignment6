@@ -63,8 +63,6 @@ int main()
 	//cout << endl << "Press enter key to continue . . . "; //non-windows end
 	//fflush(stdin);
 	//getchar();
-
-	system("pause");
 	return 0;
 }
 
